@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>CAM Generator</title>
+</head>
+<body>
+<form id=userform action="main.py" method="post" enctype="multipart/form-data">
+    <div>Customer Full Name: <input type="text" name="CustomerFullName" value="test"/></div>
+    <br>
+
+    <div>Customer Short Name: <input type="text" name="CustomerShortName" value="test"/></div>
+    <br>
+
+    <div>SAN Number: <input type="text" name="SAN" value="test"/></div>
+    <br>
+
+    <div>SID: <input type="text" name="SID" value="test"/></div>
+    <br>
+
+    <div>Customer Number<input type="text" name="Number" value="test"/></div>
+    <br>
+
+    <div>NBSU output from master(zip): <input name="nbsu" type="file"/></div>
+    <br>
+
+    <div>Solution diagram: <input name="diagram" type="file"/></div>
+    <br>
+    <table style="width: 5in">
+        <tr>
+            <td>
+                Contact Name
+            </td>
+            <td>
+                Mobile
+            </td>
+            <td>
+                Landline
+            </td>
+            <td>
+                Email
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="CName1" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CMob1" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CLan1" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CEma1" value=" "/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="CName2" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CMob2" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CLan2" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CEma2" value=" "/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="CName3" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CMob3" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CLan3" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CEma3" value=" "/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="CName4" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CMob4" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CLan4" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CEma4" value=" "/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="CName5" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CMob5" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CLan5" value=" "/>
+            </td>
+            <td>
+                <input type="text" name="CEma5" value=" "/>
+            </td>
+        </tr>
+    </table>
+    <textarea style="width: 60%; height: 8in" name="desc"/>
+    This document provides details of the SYMANTEC data protection solution that is implemented at AMP using NetBackup Enterprise Server. AMP use NBU 7.6.0.1 to protect their mission critical servers, applications and databases.
+    <h2>3.1    Technical Environment</h2>
+    The proposed backup solution for the data center environment consists of the following components:
+    <ul>
+        <li>One Microsoft Windows Server 2008 Master Server installed in the primary site</li>
+        <li>The Master Server is clustered using Microsoft Windows Server 2008 MSCS.</li>
+        <li>Tape devices are connected to the master server.</li>
+        <li>Basic disk storage units are connected to the master server.</li>
+        <li>90 Standard Windows Clients backup across the LAN.</li>
+        <li>NDMP filers backup across the LAN to the tape devices.</li>
+    </ul>
+    </textarea><br>
+
+    <div><input type="submit" value="Submit"/></div>
+</form>
+</body>
+</html>
