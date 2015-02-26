@@ -3,7 +3,11 @@
 import os
 import sys
 from re import match, sub, split
+import zipfile
 import os.path
+import msvcrt
+import traceback
+import cgi
 
 
 reload(sys)
@@ -709,64 +713,67 @@ def build_document(nb, cinfo, descr):
     print "Location: " + cinfo.CustomerShortName + ".html"
     print
 
+try:
+    msvcrt.setmode(0, os.O_BINARY)
+    msvcrt.setmode(1, os.O_BINARY)
+    cinfo = customer_info
+    form = cgi.FieldStorage()
+    upload = form["nbsu"]
+    diagram = form["diagram"]
+    cinfo.CustomerShortName = str(form["CustomerShortName"].value)
+    cinfo.CustomerFullName = str(form["CustomerFullName"].value)
+    cinfo.Number = str(form["Number"].value)
+    cinfo.SID = str(form["SID"].value)
+    cinfo.SAN = str(form["SAN"].value)
+    cinfo.contacts = list()
+    cinfo.contacts.append((form["CName1"].value, form["CMob1"].value, form["CLan1"].value, form["CEma1"].value))
+    cinfo.contacts.append((form["CName2"].value, form["CMob2"].value, form["CLan2"].value, form["CEma2"].value))
+    cinfo.contacts.append((form["CName3"].value, form["CMob3"].value, form["CLan3"].value, form["CEma3"].value))
+    cinfo.contacts.append((form["CName4"].value, form["CMob4"].value, form["CLan4"].value, form["CEma4"].value))
+    cinfo.contacts.append((form["CName5"].value, form["CMob5"].value, form["CLan5"].value, form["CEma5"].value))
+    if not os.path.exists(cinfo.CustomerShortName):
+        os.makedirs(cinfo.CustomerShortName)
+    if upload.filename is not None:
+        name = cinfo.CustomerShortName + "/" + os.path.basename(upload.filename)
+        out = open(name, 'wb', 1000)
+        while True:
+            packet = upload.file.read(1000)
+            if not packet:
+                break
+            out.write(packet)
+        out.close()
+        zfile = zipfile.ZipFile(name)
+        for name in zfile.namelist():
+            (dirname, filename) = os.path.split(name)
+            zfile.extract(name, cinfo.CustomerShortName)
+            if filename == "nbsu_info.txt":
+                root = cinfo.CustomerShortName + "/" + dirname
+        if diagram.filename is not None:
+            out = open(cinfo.CustomerShortName + "/diagram.jpg", 'wb', 1000)
+            while True:
+                packet = diagram.file.read(1000)
+                if not packet:
+                    break
+                out.write(packet)
+            out.close()
+    nb = NBSU(root)
+    build_document(nb, cinfo, str(form["desc"].value)[1:].encode('utf-8'))
+
+except:
+    f = open(cinfo.CustomerShortName + ".html", 'r')
+    traceback.print_exc(file=f)
+
+# nb = NBSU(r"C:\Users\vorop_000\Documents\nbumaster")
+# c = customer_info
+# c.CustomerShortName = "test"
+# c.CustomerFullName = "test"
+# c.Number = "test"
+# c.SID = "test"
+# c.SAN = "test"
+# c.contacts = list()
+# build_document(nb, c, "sd")
 #
-# msvcrt.setmode(0, os.O_BINARY)
-# msvcrt.setmode(1, os.O_BINARY)
-# cinfo = customer_info
-# form = cgi.FieldStorage()
-# upload = form["nbsu"]
-# diagram = form["diagram"]
-# cinfo.CustomerShortName = str(form["CustomerShortName"].value)
-# cinfo.CustomerFullName = str(form["CustomerFullName"].value)
-# cinfo.Number = str(form["Number"].value)
-# cinfo.SID = str(form["SID"].value)
-# cinfo.SAN = str(form["SAN"].value)
-# cinfo.contacts = list()
-# cinfo.contacts.append((form["CName1"].value, form["CMob1"].value, form["CLan1"].value, form["CEma1"].value))
-# cinfo.contacts.append((form["CName2"].value, form["CMob2"].value, form["CLan2"].value, form["CEma2"].value))
-# cinfo.contacts.append((form["CName3"].value, form["CMob3"].value, form["CLan3"].value, form["CEma3"].value))
-# cinfo.contacts.append((form["CName4"].value, form["CMob4"].value, form["CLan4"].value, form["CEma4"].value))
-# cinfo.contacts.append((form["CName5"].value, form["CMob5"].value, form["CLan5"].value, form["CEma5"].value))
-# if not os.path.exists(cinfo.CustomerShortName):
-# os.makedirs(cinfo.CustomerShortName)
-# if upload.filename is not None:
-# name = cinfo.CustomerShortName + "/" + os.path.basename(upload.filename)
-#     out = open(name, 'wb', 1000)
-#     while True:
-#         packet = upload.file.read(1000)
-#         if not packet:
-#             break
-#         out.write(packet)
-#     out.close()
-# zfile = zipfile.ZipFile(name)
-# for name in zfile.namelist():
-#     (dirname, filename) = os.path.split(name)
-#     zfile.extract(name, cinfo.CustomerShortName)
-#     if filename == "nbsu_info.txt":
-#         root = cinfo.CustomerShortName + "/" + dirname
-# if diagram.filename is not None:
-#     out = open(cinfo.CustomerShortName + "/diagram.jpg", 'wb', 1000)
-#     while True:
-#         packet = diagram.file.read(1000)
-#         if not packet:
-#             break
-#         out.write(packet)
-#     out.close()
 #
-# nb = NBSU(root)
-# build_document(nb, cinfo, str(form["desc"].value)[1:].encode('utf-8'))
-
-nb = NBSU(r"C:\Users\vorop_000\Documents\nbumaster")
-c = customer_info
-c.CustomerShortName = "test"
-c.CustomerFullName = "test"
-c.Number = "test"
-c.SID = "test"
-c.SAN = "test"
-c.contacts = list()
-build_document(nb, c, "sd")
-
-
 
 
 
