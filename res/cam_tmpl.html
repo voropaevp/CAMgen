@@ -728,6 +728,7 @@ The proposed backup solution for the data center environment consists of the fol
                     {{ slp }}
                 </td>
             </tr>
+            {% if slp != None %}
             {% for (attr, value) in data.slps[slp]["attributes"] %}
                 <tr>
                     <td>
@@ -753,6 +754,7 @@ The proposed backup solution for the data center environment consists of the fol
                     </tr>
                 {% endfor %}
             {% endfor %}
+            {% endif %}
         </table>
         <br>
     {% endfor %}
