@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html>
+<body>
+<meta http-equiv="Content-Type" content="text/html" property=""/>
+<Style type="text/css">
+    @font-face {
+        font-family: 'Century Gothic';
+        src: url('res/century_gothic.eot');
+        src: url('res/century_gothic.eot?#iefix') format('embedded-opentype'), url('res/century_gothic.svg#Century Gothic') format('svg'), url('res/century_gothic.woff') format('woff'), url('res/century_gothic.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    li.lvl2 {
+        font-size: 11pt;
+        padding-left: .2in;
+    }
+
+    ol {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .lvl2 a::after {
+        content: leader(dotted) target-counter(attr(href url), page);
+    }
+
+    .lvl1 a::after {
+        content: leader(dotted) target-counter(attr(href url), page);
+    }
+
+    li.lvl1 {
+        font-size: 12pt;
+        padding-top: .1in;
+        padding-bottom: .1in;
+        font-weight: bold;
+    }
+
+    div.title_info {
+        font-size: 26pt;
+        font-weight: bold;
+        position: absolute;
+        padding-top: 1in;
+        padding-bottom: 1in;
+        left: 11%;
+        top: 50%;
+        text-align: center;
+        width: 70%;
+        border: 2pt solid;
+        border-color: rgb(230, 91, 1);
+    }
+
+    hr {
+        border-color: rgb(230, 91, 1);
+        page-break-before: always;
+        page-break-after: avoid !important;
+    }
+
+    h1 {
+        page-break-after: avoid;
+        color: rgb(230, 91, 1);
+        font-size: 16pt;
+        font-weight: bold;
+    }
+
+    h2 {
+        page-break-after: avoid !important;
+        color: rgb(238, 91, 1);
+        font-size: 14pt;
+    }
+
+    p {
+        font-size: 11pt;
+    }
+
+    p.toc {
+        font-size: 18pt;
+        font-weight: bold;
+        page-break-after: avoid;
+    }
+
+    img.title1 {
+        width: 8.27in;
+        height: 10.40in;
+        border: 0;
+    }
+
+    table {
+        page-break-inside: avoid;
+        width: 6in;
+        padding-left: 0.1in;
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    tr.headlinel {
+        background-color: rgb(254, 134, 55);
+        font-weight: bold;
+        color: white;
+        text-align: center;
+    }
+
+    tr.subhead {
+        background-color: rgb(254, 225, 205);
+        text-align: center;
+        color: black;
+        font-weight: normal;
+    }
+
+    .rotate {
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+        position: relative;
+    }
+
+    td {
+        border: 1px solid black;
+        width: 2.5in;
+        height: .23in;
+        padding-left: .1in;
+        padding-right: .3in;
+    }
+
+    div.schedules {
+        -webkit-column-count: 3; /* Chrome, Safari, Opera */
+        -moz-column-count: 3; /* Firefox */
+        column-count: 3;
+        width: 100%;
+        height: 100%;
+
+    }
+
+    table.schedules {
+        page-break-inside: avoid;
+        table-layout: fixed;
+        border: 0;
+        border-collapse: collapse;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    tr.subhead_sched {
+        background-color: rgb(254, 225, 205);
+        text-align: center;
+        color: black;
+        height: 40pt;
+        border-top: 0;
+        border-collapse: collapse;
+        font-weight: normal;
+    }
+
+</Style>
+
+<img class="title1" src="res/title_header.jpg">
+
+<div class="title_info">
+    {{ customer.CustomerFullName + "&nbsp(" + customer.CustomerShortName+")" }}<br>
+    Symantec NetBackup<br>
+    Configuration Report
+</div>
+<hr>
+<p class="toc">Contents</p>
+<nav>
+    <ol>
+        <li class="lvl1"><a href="#pref1">1. Introduction</a></li>
+        <li class="lvl2"><a href="#pref11">1.1 Purpose of this Document</a></li>
+        <li class="lvl1"><a href="#pref2">2. Account details</a></li>
+        <li class="lvl2"><a href="#pref21">2.1 Customer Contacts</a></li>
+        <li class="lvl2"><a href="#pref22">2.2 Support Information</a></li>
+        <li class="lvl2"><a href="#pref23">2.3 Symantec Support Details</a></li>
+        <li class="lvl1"><a href="#pref3">3. Technical Environment</a></li>
+        <li class="lvl2"><a href="#pref31">3.1 Design components</a></li>
+        <li class="lvl2"><a href="#pref32">3.2 Graphical overview</a></li>
+        <li class="lvl1"><a href="#pref4">4. NetBackup Installation</a></li>
+        <li class="lvl1"><a href="#pref41">4.1 Server List</a></li>
+        <li class="lvl2"><a href="#pref42">4.2 Master Server Attributes</a></li>
+        <li class="lvl2"><a href="#pref43">4.3 EMM Config</a></li>
+        <li class="lvl2"><a href="#pref44">4.4 Robot and Drives</a></li>
+        <li class="lvl2"><a href="#pref45">4.5 Media Manager Storage Units</a></li>
+        <li class="lvl2"><a href="#pref46">4.6 Disk Storage Unitss</a></li>
+        <li class="lvl2"><a href="#pref47">4.7 Diskpools</a></li>
+        <li class="lvl2"><a href="#pref48">4.8 Volume Pools</a></li>
+        <li class="lvl2"><a href="#pref49">4.9 Policies</a></li>
+        <li class="lvl1"><a href="#pref5">5 Basic administrative procedures</a></li>
+        <li class="lvl1"><a href="#pref6">6 Support and Troubleshooting Tools</a></li>
+        <li class="lvl2"><a href="#pref61">6.1 Online Support</a></li>
+        <li class="lvl2"><a href="#pref61">6.1 Symantec Support Phone Number</a></li>
+    </ol>
+</nav>
+<hr>
+<h1 id="pref1">1. Introduction</h1>
+
+<h2 id="pref11">1.1 Purpose of this Document</h2>
+
+<p>This document provides {{ customer.CustomerFullName }} with an overview of the NetBackup solution within their
+    organization. These
+    details and recommendations are based upon the information collected during the implementation but also received
+    from {{ customer.CustomerFullName }} relating to their environment and their preferred site policies for
+    backup.</p>
+
+<p>The document is not intended to be a step-by-step installation guide, as the general installation and configuration
+    procedure is extensively covered in the standard NetBackup documentation. This document does not go into detailed
+    configuration of the Windows servers or storage platform as it expected that {{ customer.CustomerFullName }}
+    staff will have sufficient
+    expertise in these areas and knowledge of their environment.</p>
+<hr>
+<h1 id="pref2">2. Account details</h1>
+
+<b>Customer Name: {{ customer.CustomerFullName }}</b><br>
+<b>Customer Number: {{ customer.Number }}</b>
+
+<h2 id="pref21">2.1 Customer Contacts</h2>
+<table style="width: 6.40in">
+    <tr class="headlinel">
+        <td>Name</td>
+        <td>Mobile</td>
+        <td>Landline</td>
+        <td>Email Address</td>
+    </tr>
+    {% for (Name, Mobile, Landline, email) in customer.contacts %}
+        <tr>
+            <td>{{ Name }}</td>
+            <td>{{ Mobile }}</td>
+            <td>{{ Landline }}</td>
+            <td>{{ email }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+<h2 id="pref22">2.2 Support Information</h2>
+
+<table style="width: 6.27in">
+    <tr class="headlinel">
+        <td>Name</td>
+        <td>Mobile</td>
+        <td>Landline</td>
+        <td>Email Address</td>
+    </tr>
+    <tr>
+        <td>Support&nbsp;Desk</td>
+        <td>+971&nbsp;50&nbsp;4515310</td>
+        <td>+9714&nbsp;3642686</td>
+        <td>support@netcure.com</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+<h2 id="pref23">2.3 Symantec Support Details</h2>
+
+<table style="width: auto">
+    <tr>
+        <td>Customer Number</td>
+        <td><b>{{ customer.Number }}</b></td>
+    </tr>
+    <tr>
+        <td>SAN Number</td>
+        <td><b>{{ customer.SAN }}</b></td>
+    </tr>
+    <tr>
+        <td>Support ID</td>
+        <td><b>{{ customer.SID }}</b></td>
+    </tr>
+    <tr>
+        <td>Toll Free Support Number</td>
+        <td><b>800 0 4412244</b></td>
+    </tr>
+</table>
+<hr>
+<h1 id="pref3">3. Technical Environment</h1>
+
+<p> This document provides details of the SYMANTEC data protection solution that is implemented at AMP using NetBackup
+    Enterprise Server. {{ customer.CustomerShortName }} use NBU 7.6.0.1 to protect their mission critical servers,
+    applications and databases.</p>
+
+<h2>3.1 Technical Environment</h2>
+The proposed backup solution for the data center environment consists of the following components:
+<ul>
+    <li>One Microsoft Windows Server 2008 Master Server installed in the primary site</li>
+    <li>The Master Server is clustered using Microsoft Windows Server 2008 MSCS.</li>
+    <li>Tape devices are connected to the master server.</li>
+    <li>Basic disk storage units are connected to the master server.</li>
+    <li>90 Standard Windows Clients backup across the LAN.</li>
+    <li>NDMP filers backup across the LAN to the tape devices.</li>
+</ul>
+
+<h2 id="pref32">3.2 Graphical overview</h2>
+<img src="{{ customer.CustomerShortName }}/diagram.jpg"}} style="width: 100%; page-break-after: always">
+<hr>
+<h1 id="pref4">4. NetBackup Installation</h1>
+
+<p>
+    This section provides a high level overview of the NetBackup (NBU) environment installed at
+    {{ customer.CustomerFullName }}.
+</p>
+
+{% for line in customer.descr %}
+    <p>{{ line }}</p>
+{% endfor %}
+<br>
+
+
+<h2 id="pref41">4.1 Server List</h2>
+<table>
+    <tr class="headlinel">
+        <td>
+            Server Name
+        </td>
+        <td>
+            Server Role
+        </td>
+        <td>
+            Operating System
+        </td>
+        <td>
+            NetBackup Version
+        </td>
+    </tr>
+    {% for (v1 ,v2 ,v3 ,v4) in data.servers[1:] %}
+        <tr>
+            <td>
+                {{ v1 }}
+            </td>
+            <td>
+                {{ v2 }}
+            </td>
+            <td>
+                {{ v3 }}
+            </td>
+            <td>
+                {{ v4 }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<h2 id="pref42">4.2 Master Server Attributes</h2>
+
+<table>
+    <tr class="headlinel">
+        <td>
+            Attribute
+        </td>
+        <td>
+            Value
+        </td>
+    </tr>
+    {% for attr in data.generalinfo %}
+        <tr>
+            <td>
+                {{ attr }}
+            </td>
+            <td>
+                {{ data.generalinfo[attr] }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<br>
+
+<table>
+    <tr class="headlinel">
+        <td>
+            Attribute
+        </td>
+        <td>
+            Value
+        </td>
+    </tr>
+    {% for (attr, value) in data.masterattr[1:] %}
+        <tr>
+            <td>
+                {{ attr }}
+            </td>
+            <td>
+                {{ value }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<h2 id="pref43">4.3 EMM Config</h2>
+
+<table style="width: 5in">
+    <tr class="headlinel">
+        <td>
+            Server
+        </td>
+        <td>
+            Role
+        </td>
+    </tr>
+    {% for (attr, value) in data.emmattr[1:] %}
+        <tr>
+            <td>
+                {{ attr }}
+            </td>
+            <td>
+                {{ value }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<h2 id="pref44">4.4 Robot and Drives</h2>
+{% for device in data.devices %}
+    <table>
+        <tr class="headlinel">
+            <td>
+                Attribute
+            </td>
+            <td>
+                Value
+            </td>
+        </tr>
+        {% for (attr, value) in data.devices[device] %}
+            <tr>
+                <td>
+                    {{ attr }}
+                </td>
+                <td>
+                    {{ value }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+{% endfor %}
+
+
+<h2 id="pref45">4.5 Media Manager Storage Units</h2>
+
+<p>
+    Tape Storage units have been configured for the tape libraries that have been connected to the appliances and
+    windows media servers.
+</p>
+{% for stu in data.stuMM %}
+    <table>
+        <tr class="headlinel">
+            <td>
+                Attribute
+            </td>
+            <td>
+                Value
+            </td>
+        </tr>
+        {% for (attr, value) in data.stuMM[stu] %}
+            <tr>
+                <td>
+                    {{ attr }}
+                </td>
+                <td>
+                    {{ value }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+{% endfor %}
+
+
+<h2 id="pref46">4.6 Disk Storage Units</h2>
+
+<p>A number of disk Storage Units are configured.</p>
+{% for stud in data.stuDisk %}
+    <table>
+        <tr class="headlinel">
+            <td>
+                Attribute
+            </td>
+            <td>
+                Value
+            </td>
+        </tr>
+        {% for (attr, value) in data.stuDisk[stud] %}
+            <tr>
+                <td>
+                    {{ attr }}
+                </td>
+                <td>
+                    {{ value }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+{% endfor %}
+
+<h2 id="pref47">4.7 Diskpools</h2>
+
+<p>
+    A Disk Pool is a collection of disks in an array or devices that form a common storage entity presented to one or
+    more Storage Servers. If necessary, backup images can span disks in a disk pool. A disk pool is the storage
+    destination of a NetBackup storage unit.
+</p>
+{% if data.diskpools %}
+    {% for diskpool in data.diskpools %}
+        <table>
+            <tr class="headlinel">
+                <td colspan="2">
+                    {{ diskpool }}
+                </td>
+            </tr>
+            {% for (attr, value) in data.diskpools[diskpool] %}
+                <tr>
+                    <td>
+                        {{ attr }}
+                    </td>
+                    <td>
+                        {{ value }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+    {% endfor %}
+{% else %}
+    <p>No diskpools found in configuration</p>
+{% endif %}
+
+<h2 id="pref48">4.8 Volume Pools</h2>
+
+<table>
+    <tr class="headlinel">
+        <td>
+            Name
+        </td>
+        <td>
+            Description
+        </td>
+    </tr>
+    {% for (attr, value) in data.vpools[1:] %}
+        <tr>
+            <td>
+                {{ attr }}
+            </td>
+            <td>
+                {{ value }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<br>
+
+<h2 id="pref49">4.9 Policies</h2>
+{% for policy in data.policies %}
+    <table style="page-break-before: always; table-layout: fixed">
+        <tr class="headlinel">
+            <td colspan="2">{{ policy }}</td>
+        </tr>
+        <tr class="subhead">
+            <td><b>Attribute</b></td>
+            <td><b>Value</b></td>
+        </tr>
+        {% for attr in data.policies[policy]["attributes"] %}
+            <tr>
+                <td>{{ attr }}</td>
+                <td>{{ data.policies[policy]["attributes"][attr] }}</td>
+            </tr>
+        {% endfor %}
+        <tr class="subhead">
+            <td colspan="2">Clients</td>
+        </tr>
+        <tr class="subhead">
+            <td>Client Name</td>
+            <td>Client OS</td>
+        </tr>
+        {% for (attr, val) in data.policies[policy]["clients"] %}
+            <tr>
+                <td>{{ attr }}</td>
+                <td>{{ val }}</td>
+            </tr>
+        {% endfor %}
+        <tr class="subhead">
+            <td colspan="2"><b>Backup Selections</b></td>
+        </tr>
+        {% for selection in data.policies[policy]["selection"] %}
+            <tr>
+                <td colspan="2" style="word-wrap: break-word;">{{ selection }}</td>
+            </tr>
+        {% endfor %}
+        <tr class="subhead">
+            <td colspan="2"><b>Schedules</b></td>
+        </tr>
+        {% for schedule in data.policies[policy]["schedules"] %}
+            <tr class="subhead">
+                <td colspan="2">{{ schedule }}</td>
+            </tr>
+            <tr>
+                <td><b>Attribute</b></td>
+                <td><b>Value</b></td>
+            </tr>
+            {% for attr in data.policies[policy]["schedules"][schedule]["Attributes"] %}
+                <tr>
+                    <td>{{ attr }}</td>
+                    <td>{{ data.policies[policy]["schedules"][schedule]["Attributes"][attr] }}</td>
+                </tr>
+            {% endfor %}
+            {% if data.policies[policy]["schedules"][schedule]["Calendar schedule"] != None %}
+                <tr>
+                    <td>Calendar schedule</td>
+                    <td>Enabled</td>
+                </tr>
+                <tr class="subhead">
+                    <td colspan="2">Included dates</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="schedules">{{ data.policies.print_dates(policy, schedule, "Included dates") }}</div>
+                    </td>
+                </tr>
+                <tr class="subhead">
+                    <td colspan="2">Excluded dates</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="schedules">{{ data.policies.print_dates(policy, schedule, "Excluded dates") }}</div>
+                    </td>
+                </tr>
+            {% endif %}
+            <tr class="subhead">
+                <td colspan="2"><b>Running windows</b></td>
+            </tr>
+            <tr style="padding: 0">
+                <td colspan="2" style="padding: 0">
+                    <table class="schedules">
+                        <tr class="subhead">
+                            <td style=";border-collapse: collapse;border: 1px, solid, black; width: 34%;border-left: 0; border-top: 0;">
+                                Day
+                            </td>
+                            <td style=";border-collapse: collapse;border: 1px, solid, black; width: 33%; border-top: 0;">
+                                Open Time
+                            </td>
+                            <td style=";border-collapse: collapse;border: 1px, solid, black; width: 33%;border-right: 0;border-top: 0;">
+                                Close Time<p style="font-size: 6pt;">value grater than 2400hrs, means that window is
+                                closing on the next day</p></td>
+                        </tr>
+                        {% for  (day, start, stop) in data.policies[policy]["schedules"][schedule]["Windows"] %}
+                            <tr>
+                                <td style=";border-collapse: collapse;border: 1px, solid, black; width: 34%;border-left: 0;border-bottom: 0">{{ day }}</td>
+                                <td style="border-collapse: collapse;border: 1px, solid, black; width: 33%;border-bottom: 0">{{ start }}</td>
+                                <td style="border-collapse: collapse;border: 1px, solid, black; width: 33%;border-right: 0;border-bottom: 0">{{ stop }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+            <tr style="padding: 0">
+                <td colspan="2" style="padding: 0">
+                    <table class="schedules">
+                        <tr class="subhead_sched">
+                            <td style="border-top: 0;border-left: 0;width: 50pt;">
+                                <div style="width: 50pt;">Weekday</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">00:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">02:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">04:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">06:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">08:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">10:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">12:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">14:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">16:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">18:00</div>
+                            </td>
+                            <td style="border-top: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">20:00</div>
+                            </td>
+                            <td style="border-top: 0; border-right: 0;width: 20pt;height: 40pt; padding:1pt;">
+                                <div class="rotate">22:00</div>
+                            </td>
+                        </tr>
+                        {{ data.policies.draw_windows(policy,schedule) }}
+                    </table>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+{% endfor %}
+
+<h2 id="pref410">4.10 SLP</h2>
+
+{% if data.slps %}
+    {% for slp in data.slps %}
+        <table>
+            <tr class="headlinel">
+                <td colspan="2">
+                    {{ slp }}
+                </td>
+            </tr>
+            {% if slp != None %}
+            {% for (attr, value) in data.slps[slp]["attributes"] %}
+                <tr>
+                    <td>
+                        {{ attr }}
+                    </td>
+                    <td>
+                        {{ value }}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for operation in  range(data.slps.len(data.slps[slp]["operations"])) %}
+                <tr class="subhead">
+                    <td colspan="2"> Operation {{ operation }}</td>
+                </tr>
+                {% for (attr, value) in data.slps[slp]["operations"][operation]["attributes"] %}
+                    <tr>
+                        <td>
+                            {{ attr }}
+                        </td>
+                        <td>
+                            {{ value }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            {% endif %}
+        </table>
+        <br>
+    {% endfor %}
+{% else %}
+    <p>No SLPs found in configuration</p>
+{% endif %}
+
+<hr>
+<h1 id="pref5">5. Basic administrative procedures</h1>
+
+
+<p>This section describes administrative procedures that need to be performed regularly in the NetBackup
+    environment; </p>
+
+<b>Daily Tasks</b>
+<ol type="1">
+    <li>Open NBU Console and check the Activity Monitor for any failed jobs.</li>
+    <li>Check the services and drives status.</li>
+    <li>Verify the volume pools. It's a good practice to ensure volumes are available within the Scratch pool.</li>
+    <li>Check the volume(s) associated with the catalog and ensure there is enough free space available.</li>
+</ol>
+<p>The Activity Monitor topology view displays icons that represent the state and configuration of the entire NetBackup
+    system that is being administered. The Activity Monitor displays only robots and the drives that have storage units
+    configured. If a device host has no configured devices, the device host does not appear in the Activity Monitor. The
+    topology view shows master servers, media servers, clients, and NetBackup storage unit devices.</p>
+<img style="align-self: center; width: 5in; height: auto;" src="res/activ_mon.png">
+
+<p>The Administrators guide should be considered the primary source for NetBackup related administrative procedures. A
+    current copy of the Administrators Guide has been provided with the NBU media kit.</p>
+
+<h1 id="pref6">6. Support and Troubleshooting Tools</h1>
+
+
+<p>Whenever {{ customer.CustomerShortName }} have a problem it is recommended that they contact Condo Protego
+    immediately and register a
+    support call before attempting to resolve the problem on their own or attempting to contact Symantec's support line.
+    Any changes that {{ customer.CustomerShortName }} make to the configuration should be documented and communicated to
+    Condo Protego.</p>
+
+<p>Support Email Address support@condoprotego.com</p>
+
+<p>As part of the support agreement Condo Protego will log cases on behalf of {{ customer.CustomerShortName }} but
+    should they wish to,
+    {{ customer.CustomerShortName }} are able to log calls directly with Symantec using the support number listed below.
+    Details of the case
+    should be sent to the support email address to ensure it is effectively managed.</p>
+
+<h2 id="pref61">6.1 Online Support</h2>
+
+<p>There is an online Support Knowledgebase available at <a href="http://support.Symantec.com">http://support.symantec.com.</a>
+</p>
+
+<h2 id="pref62">6.2 Symantec Support Phone Number</h2>
+
+<p>Symantec Support can be contacted on 800 0441 2244 or local support number.</p>
+
+<p>When calling Symantec Support please ensure that only one of your named contacts makes the call, and that they have
+    the following information available:</p>
+<ul>
+    <li>Description of the problem, including symptoms, exact error messages, scope of users/servers affected, time when
+        problem started, actions taken so far to attempt to resolve the problem. It may also be useful to have traces
+        and screen dumps available.
+    </li>
+    <li>Version of software you are running</li>
+    <li>Version of Operating system, service pack, etc.</li>
+</ul>
+<p>You will also be asked to define the severity of the support call:</p>
+<ul>
+    <li>Severity 1 - a "system down" or product inoperative condition that impacts your production / business-critical
+        operation
+    </li>
+    <li>Severity 2 - severely affects or restricts major functionality</li>
+    <li>Severity 3 - issue with no major effect on business systems</li>
+    <li>Severity 4 - minor condition or documentation error</li>
+</ul>
+<p>It may expedite your call by making sure you are in front of, or have access to the computer/server you need to
+    troubleshoot.</p>
+
+</body>
+</html>
