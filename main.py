@@ -56,7 +56,7 @@ class Policies(Parsers):
                               ("Ignore Client Direct", "no"), ("Enable Metadata Indexing", "no"),
                               ("Index server name", "NULL"), ("Use Accelerator", "no")]
         self.__sdefaults__ = [("  Type", None), ("  Retention Level", None), ("  u-wind/o/d", "0 0"),
-                              ("  Incr Type", None),
+                              ("  Incr Type", None), ("  Frequency", None), ("  Retention Level", None),
                               ("  Alt Read Host", "(none defined)"), ("  Max Frag Size", "0 MB"), ("  Synthetic", "0"),
                               ("  Checksum Change Detection", "0"), ("  PFI Recovery", "0"), ("  Maximum MPX", "10"),
                               ("  Number Copies", "1"), ("  Fail on Error", "0"), ("  Residence", None),

@@ -160,7 +160,82 @@
 
 </Style>
 <table>
-    <thead></thead>
+    <thead>
+    <tr>
+        <td>Policy</td>
+        <td>Policy Type</td>
+        <td>Clients</td>
+        <td>Backup Selection</td>
+        <td>Backup Schedule Type</td>
+        <td>Backup Frequency</td>
+        <td>Backup Residence</td>
+        <td>Retention on Dest 1</td>
+        <td>Backup Residence 2</td>
+        <td>Retention on Dest 2</td>
+        <td>Backup Residence 3</td>
+        <td>Retention on Dest 3</td>
+        <td>Backup Residence 4</td>
+        <td>Retention on Dest 4</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for policy in data.policies %}
+    <tr>
+        <td rowspan={{len(data.policies[policy][\schedules\])}}>{{ policy }}</td>
+        <td rowspan={{len(data.policies[policy][\schedules\])}}>{{ data.policies[policy]["attributes"]["Policy Type"]
+            }}
+        </td>
+        <td rowspan={{len(data.policies[policy][\schedules\])}}>
+            {% for (attr, val) in data.policies[policy]["clients"] %}
+            {{attr}}<br>
+            {% endfor %}
+        </td>
+        <td rowspan={{len(data.policies[policy][\schedules\])}}>
+            {% for selection in data.policies[policy]["selection"] %}
+            {{selection}}<br>
+            {% endfor %}
+        </td>
+        {% for schedule in data.policies[policy]["schedules"] %}
+        <td>
+            {{ schedule }}
+        </td>
+        <td>
+            {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Type"] }}
+        </td>
+            {% if data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"] != "(specific storage unit not
+            required)" %}
+                {% if data.policies[policy]["schedules"][schedule]["Attributes"]["Residence is Storage Lifecycle Policy"] ==
+                "0" %}
+                    <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"] }} </td>
+                    <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Retention Level"] }} </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                {% else %}
+                    <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"] }} </td>
+                    <td> {{data}}</td>
+                {% endif %}
+            {% else %}
+                {% if data.policies[policy]["attributes"]["Residence is Storage Lifecycle Policy"] ==
+                "yes" %}
+                    <td> {{ data.policies[policy]["attributes"]["Residence"] }} </td>
+                {% else %}
+                    <td> {{ data.policies[policy]["attributes"]["Residence"] }} </td>
+                    <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Retention Level"] }} </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                    <td> No SLP associated </td>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </tr>
+    </tbody>
 </table>
 
 </body>
