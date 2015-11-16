@@ -168,7 +168,8 @@ class Policies(Parsers):
             if schedule in self[policy]["schedules"]:
                 for date in self[policy]["schedules"][schedule]["Calendar schedule"][p_type]:
                     output += date + " \n"
-                    output = sub(" ", "&nbsp", output)
+                    output = sub(", ", ",&nbsp;", output)
+                    output = sub("k ", "k&nbsp;", output)
                 return output
             else:
                 return None
@@ -216,7 +217,7 @@ class Policies(Parsers):
             if coordinates[i][0] >= 0:
                 output += "<td style='border-top:0;padding:0; border-bottom:0;'><div style='position:relative;background-color: rgb(230, 91, 1);width:" + str(
                     round(333 * (coordinates[i][1] - coordinates[i][0]) / (
-                        24 * 60 * 60)) + round(coordinates[i][1] / (24 * 60 * 60) * 1.25)) + "pt;'>&nbsp</div></td>\n"
+                        24 * 60 * 60)) + round(coordinates[i][1] / (24 * 60 * 60) * 1.25)) + "pt;'>&nbsp;</div></td>\n"
                 if coordinates[i][3] != 0:
                     for j in range(1, 12):
                         if j * 20 < round(240 * coordinates[i][2] / (24 * 60 * 60)) and round(
@@ -225,7 +226,7 @@ class Policies(Parsers):
                                 round((240 * coordinates[i][2] / (
                                     24 * 60 * 60)) - j * 20) * 1.25) + "pt;width: " + str(round(
                                 321 * (coordinates[i][3] - coordinates[i][2]) / (
-                                    24 * 60 * 60)) + (12 - j) * 1.25) + "pt;'>&nbsp</div></td>\n"
+                                    24 * 60 * 60)) + (12 - j) * 1.25) + "pt;'>&nbsp;</div></td>\n"
                         else:
                             output += "<td style='border-top:0;padding:0; border-bottom:0;'></td>\n"
                 else:
@@ -241,7 +242,7 @@ class Policies(Parsers):
                                     24 * 60 * 60)) - j * 20) * 1.25) + "pt;width: " + str(round(
                                 333 * (coordinates[i][3] - coordinates[i][2]) / (
                                     24 * 60 * 60)) + round((coordinates[i][3] - coordinates[i][2]) / (
-                                24 * 60 * 60) * 1.25)) + "pt;'>&nbsp</div></td>\n"
+                                24 * 60 * 60) * 1.25)) + "pt;'>&nbsp;</div></td>\n"
                         else:
                             output += "<td style='border-top:0; border-bottom:0; padding:0;'></td>\n"
                 else:
@@ -713,9 +714,9 @@ def build_document(nb, cinfo, descr, out):
         f = open(out, "w")
     f.write(str(template.render(data=nb, customer=cinfo, desc=descr)).encode('utf-8'))
     f.close()
-    print "Content-Type: text/html; charset=utf-8;"
-    print "Location: " + cinfo.CustomerShortName + ".html"
-    print
+    # print "Content-Type: text/html; charset=utf-8;"
+    # print "Location: " + cinfo.CustomerShortName + ".html"
+    # print
 
 # try:
 #     msvcrt.setmode(0, os.O_BINARY)
