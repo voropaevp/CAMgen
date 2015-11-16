@@ -705,6 +705,14 @@ class customer_info:
         self.contacts = list()
 
 
+def build_document_brief(nb, out):
+    env = Environment(loader=FileSystemLoader("res"))
+    template = env.get_template('snap_tmpl.html')
+    f = open(out, "w")
+    f.write(str(template.render(data=nb)).encode('utf-8'))
+    f.close()
+
+
 def build_document(nb, cinfo, descr, out):
     env = Environment(loader=FileSystemLoader("res"))
     template = env.get_template('cam_tmpl.html')
@@ -768,9 +776,10 @@ def build_document(nb, cinfo, descr, out):
 #     f = open(cinfo.CustomerShortName + ".html", 'r')
 #     traceback.print_exc(file=f)
 
-parser = argparse.ArgumentParser(description='Build NBU documentation')
+parser = argparse.ArgumentParser(description='Build NBU documentation open output html file in Word')
 parser.add_argument('--nbsu', help='path to unzipped nbsu file', type=str, required=True)
 parser.add_argument('--output', help='output file location', type=str, required=True)
+parser.add_argument('--brief', help='output in simple table format', action='store_true')
 args = parser.parse_args()
 nb = NBSU(args.nbsu)
 c = customer_info
@@ -780,7 +789,10 @@ c.Number = "test"
 c.SID = "test"
 c.SAN = "test"
 c.contacts = list()
-build_document(nb, c, "sd", args.output)
+if args.brief:
+    build_document_brief(nb, args.output)
+else:
+    build_document(nb, c, "sd", args.output)
 
 
 
