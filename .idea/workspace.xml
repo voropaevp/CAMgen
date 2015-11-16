@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="412ce677-0e4e-44d9-b182-19b05e7f9667" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/snap_tmpl.html" afterPath="$PROJECT_DIR$/res/snap_tmpl.html" />
     </list>
     <ignored path="CAMgen.iws" />
@@ -40,8 +39,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="53" column="99" selection-start-line="53" selection-start-column="99" selection-end-line="53" selection-end-column="99" />
+            <state vertical-scroll-proportion="-6.340909">
+              <caret line="422" column="28" selection-start-line="422" selection-start-column="23" selection-end-line="422" selection-end-column="28" />
               <folding>
                 <element signature="e#26#35#0" expanded="true" />
               </folding>
@@ -49,21 +48,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cam_tmpl.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="cam_tmpl.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/cam_tmpl.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.61601883">
-              <caret line="766" column="4" selection-start-line="766" selection-start-column="4" selection-end-line="766" selection-end-column="4" />
+            <state vertical-scroll-proportion="-12.470589">
+              <caret line="743" column="67" selection-start-line="743" selection-start-column="67" selection-end-line="743" selection-end-column="81" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="snap_tmpl.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="snap_tmpl.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/res/snap_tmpl.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.8846154">
-              <caret line="218" column="31" selection-start-line="218" selection-start-column="31" selection-end-line="218" selection-end-column="31" />
+            <state vertical-scroll-proportion="2.8256772">
+              <caret line="284" column="8" selection-start-line="284" selection-start-column="8" selection-end-line="284" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -183,7 +182,7 @@
       <recent name="C:\Users\Netcure\PycharmProjects\CAMgen\res" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.cxfreeze">
+  <component name="RunManager" selected="Python.camgen">
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -391,7 +390,7 @@
       <module name="CAMGen" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="--nbsu &quot;C:\Users\Netcure\Documents\customers\MOFA\NBSU-MOFA\NBSU-master1&quot; --output &quot;C:\Users\Netcure\Documents\customers\MOFA\MOFA.html&quot;" />
+      <option name="PARAMETERS" value="--brief --nbsu &quot;C:\Users\Netcure\Documents\customers\MOFA\NBSU-MOFA\NBSU-master1&quot; --output &quot;C:\Users\Netcure\Documents\customers\MOFA\MOFA.html&quot;" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
@@ -477,7 +476,13 @@
       <option name="project" value="LOCAL" />
       <updated>1447674364873</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="brief output v0.1">
+      <created>1447680319655</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1447680319655</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -523,7 +528,8 @@
     <MESSAGE value="empty schedules fix&#10;" />
     <MESSAGE value="tables spacing fix&#10;" />
     <MESSAGE value="brief output v0" />
-    <option name="LAST_COMMIT_MESSAGE" value="brief output v0" />
+    <MESSAGE value="brief output v0.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="brief output v0.1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -605,26 +611,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="53" column="99" selection-start-line="53" selection-start-column="99" selection-end-line="53" selection-end-column="99" />
+        <state vertical-scroll-proportion="-6.340909">
+          <caret line="422" column="28" selection-start-line="422" selection-start-column="23" selection-end-line="422" selection-end-column="28" />
           <folding>
             <element signature="e#26#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/snap_tmpl.html">
+    <entry file="file://$PROJECT_DIR$/res/cam_tmpl.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.8846154">
-          <caret line="218" column="31" selection-start-line="218" selection-start-column="31" selection-end-line="218" selection-end-column="31" />
+        <state vertical-scroll-proportion="-12.470589">
+          <caret line="743" column="67" selection-start-line="743" selection-start-column="67" selection-end-line="743" selection-end-column="81" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/cam_tmpl.html">
+    <entry file="file://$PROJECT_DIR$/res/snap_tmpl.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.61601883">
-          <caret line="766" column="4" selection-start-line="766" selection-start-column="4" selection-end-line="766" selection-end-column="4" />
+        <state vertical-scroll-proportion="2.8256772">
+          <caret line="284" column="8" selection-start-line="284" selection-start-column="8" selection-end-line="284" selection-end-column="8" />
           <folding />
         </state>
       </provider>

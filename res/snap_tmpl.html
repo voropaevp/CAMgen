@@ -169,13 +169,9 @@
         <td>Backup Schedule Type</td>
         <td>Backup Frequency</td>
         <td>Backup Residence</td>
-        <td>Retention on Dest 1</td>
-        <td>Backup Residence 2</td>
-        <td>Retention on Dest 2</td>
-        <td>Backup Residence 3</td>
-        <td>Retention on Dest 3</td>
-        <td>Backup Residence 4</td>
-        <td>Retention on Dest 4</td>
+        <td>Retention on Primary Disk</td>
+        <td>Retention on Secondary Disk</td>
+        <td>Retention on Tape</td>
     </tr>
     </thead>
     <tbody>
@@ -187,12 +183,12 @@
         </td>
         <td rowspan={{len(data.policies[policy][\schedules\])}}>
             {% for (attr, val) in data.policies[policy]["clients"] %}
-            {{attr}}<br>
+                {{ attr }} <br>
             {% endfor %}
         </td>
         <td rowspan={{len(data.policies[policy][\schedules\])}}>
             {% for selection in data.policies[policy]["selection"] %}
-            {{selection}}<br>
+                {{ selection }} <br>
             {% endfor %}
         </td>
         {% for schedule in data.policies[policy]["schedules"] %}
@@ -206,37 +202,86 @@
             required)" %}
                 {% if data.policies[policy]["schedules"][schedule]["Attributes"]["Residence is Storage Lifecycle Policy"] ==
                 "0" %}
-                    <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"] }} </td>
-                    <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Retention Level"] }} </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
+                    {% if data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"].find("hcart") != -1 %}
+                        <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Retention Level"] }} </td>
+                        <td> No SLP associated </td>
+                        <td> No SLP associated </td>
+                    {% else %}
+                        <td> No SLP associated </td>
+                        <td> No SLP associated </td>
+                        <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Retention Level"] }} </td>
+                    {% endif %}
                 {% else %}
-                    <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"] }} </td>
-                    <td> {{data}}</td>
+                    {% if len(data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]) == 1 %}
+                        {% if {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["1"]["Storage"] }}.find("hcart") != -1 %}
+                            <td> {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["1"]["Retention Level"] }} </td>
+                            <td> - </td>
+                            <td> - </td>
+                        {% else %}
+                            <td> - </td>
+                            <td> - </td>
+                            <td> {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["1"]["Retention Level"] </td>
+                        {% endif %}
+                    {% elif len(data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]) == 2 %}
+                        {% if {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["1"]["Storage"] }}.find("hcart") != -1 %}
+                            <td> {{ {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["1"]["Retention Level"] }} </td>
+                            {% if {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["2"]["Storage"] }}.find("hcart") != -1 %}
+                                <td> {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["2"]["Retention Level"] }} </td>
+                                <td> - </td>
+                            {% else %}
+                                <td> - </td>
+                                <td> {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["2"]["Retention Level"] }} </td>
+                            {% endif %}
+                        {% endif %}
+                    {% elif len(data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]) == 3 %}
+                         <td> {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["1"]["Retention Level"] }} </td>
+                         <td> {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["2"]["Retention Level"] }} </td>
+                         <td> {{ data.slps[data.policies[policy]["schedules"][schedule]["Attributes"]["Residence"]]["operations"]["3"]["Retention Level"] }} </td>
+                    {% endif %}
                 {% endif %}
             {% else %}
                 {% if data.policies[policy]["attributes"]["Residence is Storage Lifecycle Policy"] ==
                 "yes" %}
-                    <td> {{ data.policies[policy]["attributes"]["Residence"] }} </td>
+                    {% if len(data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]) == 1 %}
+                        {% if {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["1"]["Storage"] }}.find("hcart") != -1 %}
+                            <td> {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["1"]["Retention Level"] }} </td>
+                            <td> - </td>
+                            <td> - </td>
+                        {% else %}
+                            <td> - </td>
+                            <td> - </td>
+                            <td> {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["1"]["Retention Level"] }} </td>
+                        {% endif %}
+                    {% elif len(data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]) == 2 %}
+                        {% if {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["1"]["Storage"] }}.find("hcart") != -1 %}
+                            <td> {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["1"]["Retention Level"] }} </td>
+                            {% if {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["2"]["Storage"] }}.find("hcart") != -1 %}
+                                <td> {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["2"]["Retention Level"] }} </td>
+                                <td> - </td>
+                            {% else %}
+                                <td> - </td>
+                                <td> {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["2"]["Retention Level"] }} </td>
+                            {% endif %}
+                        {% endif %}
+                    {% elif len(data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]) == 3 %}
+                         <td> {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["1"]["Retention Level"] }} </td>
+                         <td> {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["2"]["Retention Level"] }} </td>
+                         <td> {{ data.slps[data.policies[policy]["attributes"]["Residence"]]["operations"]["3"]["Retention Level"] }} </td>
+                    {% endif %}
                 {% else %}
-                    <td> {{ data.policies[policy]["attributes"]["Residence"] }} </td>
-                    <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Retention Level"] }} </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
-                    <td> No SLP associated </td>
+                    {% if data.policies[policy]["attributes"]["Residence"].find("hcart") != -1 %}
+                        <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Retention Level"] }} </td>
+                        <td> No SLP associated </td>
+                        <td> No SLP associated </td>
+                    {% else %}
+                        <td> No SLP associated </td>
+                        <td> No SLP associated </td>
+                        <td> {{ data.policies[policy]["schedules"][schedule]["Attributes"]["Retention Level"] }} </td>
                 {% endif %}
             {% endif %}
-        {% endfor %}
+        {% endif %}
     </tr>
     </tbody>
 </table>
-
 </body>
 </html>
