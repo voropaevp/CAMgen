@@ -709,7 +709,9 @@ The proposed backup solution for the data center environment consists of the fol
                                 <div class="rotate">22:00</div>
                             </td>
                         </tr>
-                        {{ data.policies.draw_windows(policy,schedule) }}
+                        {% if schedule != '(none defined)' %}
+                        {{data.policies.draw_windows(policy,schedule)}}
+                        {% endif %}
                     </table>
                 </td>
             </tr>
