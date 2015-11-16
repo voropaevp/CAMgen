@@ -62,7 +62,7 @@ class Policies(Parsers):
                               ("  Number Copies", "1"), ("  Fail on Error", "0"), ("  Residence", None),
                               ("  Volume Pool", "(same as policy volume pool)"),
                               ("  Server Group", "(same as specified for policy)"),
-                              ("  Residence is Storage Lifecycle Policy", "0"), ("  Schedule indexing", "0")]
+                              ("  Residence is Storage Lifecycle Policy", None), ("  Schedule indexing", "0")]
         self._generate(bppllist)
 
     def __getitem__(self, item):
@@ -97,7 +97,8 @@ class Policies(Parsers):
                         if (attr, val) in self.__pdefaults__:
                             continue
                         else:
-                            self.policies[policy]["attributes"][attr] = val
+                            if attr not in self.policies[policy]["attributes"]:
+                                self.policies[policy]["attributes"][attr] = val
                 if self.get_value("Snapshot Method Arguments", line) is not None:
                     s = split(",", self.get_value("Snapshot Method Arguments", line))
                     val = ""
@@ -280,14 +281,20 @@ class SLPs(Parsers):
         slp = None
         operation = None
         for line in self._nbstl:
+            if self.get_value("Window Name", line) is not None:
+                continue
             if self.get_value("Name", line) is not None:
                 slp = self.get_value("Name", line)
+                if slp in self.slp:
+                    self.slp[slp]["finalized"] = True
+                    continue
                 operation = None
                 self.slp[slp] = dict()
                 self.slp[slp]["attributes"] = list()
                 self.slp[slp]["operations"] = list()
+                self.slp[slp]["finalized"] = False
                 continue
-            if slp is not None:
+            if slp is not None and not self.slp[slp]["finalized"]:
                 if operation is None:
                     for (attr, default_value) in self._sdefaults:
                         value = self.get_value(attr, line)
@@ -789,6 +796,14 @@ c.Number = "test"
 c.SID = "test"
 c.SAN = "test"
 c.contacts = list()
+
+for policy in nb.policies:
+    if "(specific storage unit not required)" == nb.policies[policy]["attributes"]["Residence"]:
+        print policy
+    for schedule in nb.policies[policy]["schedules"]:
+        if "Residence" not in nb.policies[policy]["schedules"][schedule]["Attributes"]:
+            pass
+            # print policy
 if args.brief:
     build_document_brief(nb, args.output)
 else:
