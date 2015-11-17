@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="412ce677-0e4e-44d9-b182-19b05e7f9667" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build-v2.0.zip" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/exe.win32-2.7/library.zip" afterPath="$PROJECT_DIR$/build/exe.win32-2.7/library.zip" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/exe.win32-2.7/res/snap_tmpl.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CAMgen.iws" />
@@ -501,7 +500,13 @@
       <option name="project" value="LOCAL" />
       <updated>1447766437119</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="build is added">
+      <created>1447766523917</created>
+      <option name="number" value="00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1447766523917</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -550,7 +555,8 @@
     <MESSAGE value="brief output v0.1" />
     <MESSAGE value="11/16" />
     <MESSAGE value="brief key added" />
-    <option name="LAST_COMMIT_MESSAGE" value="brief key added" />
+    <MESSAGE value="build is added" />
+    <option name="LAST_COMMIT_MESSAGE" value="build is added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
