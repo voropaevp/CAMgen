@@ -259,13 +259,17 @@ class SLPs(Parsers):
         self._nbstl = nbstl
         self._sdefaults = [("Data Classification", "(none specified)"), ("Duplication job priority", "0"),
                            ("State", None), ("Version", "1")]
-        self._odefaults = [("Storage", None), ("Volume Pool", "(none specified)"),
+        self._odefaults = [("Storage", None), ("Retention Level", None), ("Volume Pool", "(none specified)"),
                            ("Server Group", "(none specified)"), ("Retention Type", "0 (Fixed)"),
-                           ("Retention Level", None), ("Alternate Read Server", "(none specified)"),
+                           ("Alternate Read Server", "(none specified)"),
                            ("Preserve Multiplexing", "false"), ("Enable Automatic Remote Import", "true"),
                            ("State", "active"), ("Source", None), ("Operation ID", "(none specified)"),
-                           ("Operation Index", None)]
+                           ("Operation Index", None), ("State", None), ("Source", None), ("Operation ID", None),
+                           ("Target Master Server", None), ("Deferred Duplication", None),
+                           ("Target Import SLP", None), ("Source Volume(Server:Type:Volume)", None),
+                           ("--> Target Volume", None), ("Window Name", None), ("Window Close Option", None)]
         self._generate()
+        self.sort()
 
     def __getitem__(self, item):
         return self.slp[item]
@@ -313,6 +317,24 @@ class SLPs(Parsers):
                         if value != default_value and value is not None:
                             self.slp[slp]["operations"][-1]["attributes"].append((attr, value))
                             continue
+
+    def sort(self):
+        # try:
+            for slp in self.slp:
+                for operation in range(len(self.slp[slp]["operations"])):
+                    t = list()
+                    for ( default_attr, default_value) in self._odefaults:
+                        for (attr, val) in self.slp[slp]["operations"][operation]["attributes"]:
+                            if default_attr == attr:
+                                t.append((attr, val))
+                    self.slp[slp]["operations"][operation]["attributes"] = t
+        # except TypeError:
+        #     print slp, operation
+        #     raise TypeError
+
+
+
+
 
 
 class DiskPools(Parsers):
@@ -799,6 +821,7 @@ c.contacts = list()
 
 for policy in nb.policies:
     if "(specific storage unit not required)" == nb.policies[policy]["attributes"]["Residence"]:
+        print policy
         print policy
     for schedule in nb.policies[policy]["schedules"]:
         if "Residence" not in nb.policies[policy]["schedules"][schedule]["Attributes"]:
