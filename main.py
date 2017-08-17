@@ -107,11 +107,15 @@ class Policies(Parsers):
                     self.policies[policy]["attributes"]["Snapshot Method Arguments"] = val
                 if self.get_value("Include", line) is not None:
                     self.policies[policy]["selection"].append(self.get_value("Include", line))
-                if line[:7] == "Client/":
+                if line[:7] == "Client/" :
                     m = split("[ ]+", sub(".*:[ ]+", "", line))
                     client_name = m[0]
                     clint_os = m[2]
                     self.policies[policy]["clients"].append((client_name, clint_os))
+                if line[:21] == "Instance Group Name/":
+                    m = split("[ ]+", sub(".*:[ ]+", "", line))
+                    client_name = m[0]
+                    self.policies[policy]["clients"].append((client_name, '-'))
                 if self.get_value("Schedule", line) is not None:
                     schedule = self.get_value("Schedule", line)
                     self.policies[policy]["schedules"][schedule] = dict()

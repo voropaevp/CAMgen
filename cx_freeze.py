@@ -4,7 +4,7 @@ from cx_Freeze import setup, Executable
 base = None
 include_files = [r"res/"]
 includes = []
-excludes = []
+excludes = ['jinja2.asyncfilters', 'jinja2.asyncsupport']
 packages = ["os", "sys", "re", "jinja2", "argparse"]
 setup(name="CAMgen",
       version="0.8",
