@@ -112,7 +112,7 @@ class Policies(Parsers):
                     client_name = m[0]
                     clint_os = m[2]
                     self.policies[policy]["clients"].append((client_name, clint_os))
-                if line[:21] == "Instance Group Name/":
+                if line[:20] == "Instance Group Name/":
                     m = split("[ ]+", sub(".*:[ ]+", "", line))
                     client_name = m[0]
                     self.policies[policy]["clients"].append((client_name, '-'))
