@@ -3,13 +3,14 @@
 import os
 import sys
 from re import match, sub, split
+import csv
 import zipfile
 import os.path
 import msvcrt
 import traceback
+from collections import  defaultdict
 import cgi
 import argparse
-
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -90,6 +91,9 @@ class Policies(Parsers):
                 self.policies[policy]["schedules"] = dict()
                 self.policies[policy]["selection"] = list()
                 self.policies[policy]["clients"] = list()
+                self.policies[policy]["inst_groups"] = list()
+                self.policies[policy]["ora_inst_groups"] = dict()
+                self.policies[policy]["sql_inst_groups"] = dict()
             if policy is not None:
                 for (attr, _) in self.__pdefaults__:
                     val = self.get_value(attr, line)
@@ -107,15 +111,15 @@ class Policies(Parsers):
                     self.policies[policy]["attributes"]["Snapshot Method Arguments"] = val
                 if self.get_value("Include", line) is not None:
                     self.policies[policy]["selection"].append(self.get_value("Include", line))
-                if line[:7] == "Client/" :
+                if line[:7] == "Client/":
                     m = split("[ ]+", sub(".*:[ ]+", "", line))
                     client_name = m[0]
                     clint_os = m[2]
                     self.policies[policy]["clients"].append((client_name, clint_os))
                 if line[:20] == "Instance Group Name/":
                     m = split("[ ]+", sub(".*:[ ]+", "", line))
-                    client_name = m[0]
-                    self.policies[policy]["clients"].append((client_name, '-'))
+                    inst_grp = m[0]
+                    self.policies[policy]["inst_groups"].append(inst_grp)
                 if self.get_value("Schedule", line) is not None:
                     schedule = self.get_value("Schedule", line)
                     self.policies[policy]["schedules"][schedule] = dict()
@@ -324,21 +328,17 @@ class SLPs(Parsers):
 
     def sort(self):
         # try:
-            for slp in self.slp:
-                for operation in range(len(self.slp[slp]["operations"])):
-                    t = list()
-                    for ( default_attr, default_value) in self._odefaults:
-                        for (attr, val) in self.slp[slp]["operations"][operation]["attributes"]:
-                            if default_attr == attr:
-                                t.append((attr, val))
-                    self.slp[slp]["operations"][operation]["attributes"] = t
-        # except TypeError:
-        #     print slp, operation
-        #     raise TypeError
-
-
-
-
+        for slp in self.slp:
+            for operation in range(len(self.slp[slp]["operations"])):
+                t = list()
+                for (default_attr, default_value) in self._odefaults:
+                    for (attr, val) in self.slp[slp]["operations"][operation]["attributes"]:
+                        if default_attr == attr:
+                            t.append((attr, val))
+                self.slp[slp]["operations"][operation]["attributes"] = t
+                # except TypeError:
+                #     print slp, operation
+                #     raise TypeError
 
 
 class DiskPools(Parsers):
@@ -472,13 +472,29 @@ class devices(Parsers):
                         self.drives[drive]["standalone"] = False
                         del self.drives[drive]
         for drive in self.drives:
-            self.device[drive]["standalone"] = True
+            self.devices[drive]["standalone"] = True
             self.devices[drive] = self.drives
 
 
-
-
-
+class DbInstance(object):
+    def __init__(self, sql_path, ora_path):
+        self.sql_instance_dict = defaultdict(list)
+        self.ora_instance_dict = defaultdict(list)
+        if sql_path:
+            with open(sql_path) as sql_fh:
+                # Instance Name, State, Host, Cluster Type, Version, Release, SP, Edition, OS, Instance Group,
+                # Registered, Policies
+                sql_reader = csv.reader(sql_fh, delimiter=',', skipinitialspace=True)
+                for row in sql_reader:
+                    if row[1] == 'Active':
+                        self.sql_instance_dict[row[10]].append([row[0]] + row[2:10])
+        if ora_path:
+            with open(ora_path) as sql_fh:
+                # Instance Name, State, Host, OS Type, ORACLE_HOME, TNS_ADMIN, Instance Group, Registered, Policies
+                sql_reader = csv.reader(sql_fh, delimiter=',', skipinitialspace=True)
+                for row in sql_reader:
+                    if row[1] == 'Active':
+                        self.ora_instance_dict[row[6]].append([row[0]] + row[2:6])
 
 
 
@@ -495,7 +511,7 @@ class NBSU:
         self.pools = dict()
         self.vpools = [(str, str), ]
         self.servers = [(str, str, str, str), ]
-        ( _, _, filelist) = next(os.walk(self.path))
+        (_, _, filelist) = next(os.walk(self.path))
         f = 0
         for filename in filelist:
             if match(".*txt", filename) is not None:
@@ -759,6 +775,7 @@ def build_document(nb, cinfo, descr, out):
     # print "Location: " + cinfo.CustomerShortName + ".html"
     # print
 
+
 # try:
 #     msvcrt.setmode(0, os.O_BINARY)
 #     msvcrt.setmode(1, os.O_BINARY)
@@ -812,6 +829,8 @@ def build_document(nb, cinfo, descr, out):
 parser = argparse.ArgumentParser(description='Build NBU documentation open output html file in Word')
 parser.add_argument('--nbsu', help='path to unzipped nbsu file', type=str, required=True)
 parser.add_argument('--output', help='output file location', type=str, required=True)
+parser.add_argument('--nboraadm', help='path to nboraadm -list_instances output file', type=str)
+parser.add_argument('--nbsqladm', help='path to nbsqladm -list_instances output file', type=str)
 parser.add_argument('--brief', help='output in simple table format', action='store_true')
 args = parser.parse_args()
 nb = NBSU(args.nbsu)
@@ -822,10 +841,16 @@ c.Number = "test"
 c.SID = "test"
 c.SAN = "test"
 c.contacts = list()
+db_inst = DbInstance(args.nbsqladm, args.nboraadm)
+
 
 for policy in nb.policies:
+    for inst_grp in nb.policies[policy]['inst_groups']:
+        if inst_grp in db_inst.ora_instance_dict:
+            nb.policies[policy]['ora_inst_groups'][inst_grp] = db_inst.ora_instance_dict[inst_grp]
+        if inst_grp in db_inst.sql_instance_dict:
+            nb.policies[policy]['sql_inst_groups'][inst_grp] = db_inst.sql_instance_dict[inst_grp]
     if "(specific storage unit not required)" == nb.policies[policy]["attributes"]["Residence"]:
-        print policy
         print policy
     for schedule in nb.policies[policy]["schedules"]:
         if "Residence" not in nb.policies[policy]["schedules"][schedule]["Attributes"]:
@@ -835,8 +860,3 @@ if args.brief:
     build_document_brief(nb, args.output)
 else:
     build_document(nb, c, "sd", args.output)
-
-
-
-
-

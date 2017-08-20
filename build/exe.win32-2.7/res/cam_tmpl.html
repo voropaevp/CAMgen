@@ -25,6 +25,15 @@
         color: black;
     }
 
+    table.inst_group{
+        margin: 0;
+        position: relative;
+        height: 100%;
+        width: 100%;
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+
     .lvl2 a::after {
         content: leader(dotted) target-counter(attr(href url), page);
     }
@@ -53,6 +62,7 @@
         border: 2pt solid;
         border-color: rgb(230, 91, 1);
     }
+
 
     hr {
         border-color: rgb(230, 91, 1);
@@ -303,7 +313,7 @@ The proposed backup solution for the data center environment consists of the fol
 </ul>
 
 <h2 id="pref32">3.2 Graphical overview</h2>
-<img src="{{ customer.CustomerShortName }}/diagram.jpg"}} style="width: 100%; page-break-after: always">
+<img src="{{ customer.CustomerShortName }}/diagram.jpg" }} style="width: 100%; page-break-after: always">
 <hr>
 <h1 id="pref4">4. NetBackup Installation</h1>
 
@@ -581,16 +591,81 @@ The proposed backup solution for the data center environment consists of the fol
         <tr class="subhead">
             <td colspan="2">Clients</td>
         </tr>
-        <tr class="subhead">
-            <td>Client Name</td>
-            <td>Client OS</td>
-        </tr>
-        {% for (attr, val) in data.policies[policy]["clients"] %}
+        {% for inst_grp, props in data.policies[policy]["sql_inst_groups"].iteritems() %}
             <tr>
-                <td>{{ attr }}</td>
-                <td>{{ val }}</td>
+                <td colspan="2" style="padding: 0">
+                    <table class="inst_group">
+                        <thead>
+                        <tr>
+                            <td colspan="2">MSSQL Instance Group</td>
+                            <td colspan="6">{{ inst_grp }}</td>
+                        </tr>
+                        <tr>
+                            <td>Instance Name</td>
+                            <td>Host</td>
+                            <td>Cluster Type</td>
+                            <td>Version</td>
+                            <td>Release</td>
+                            <td>SP</td>
+                            <td>Edition</td>
+                            <td>OS</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in props %}
+                            <tr>
+                                {% for e in row %}
+                                    <td>{{ e }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
             </tr>
         {% endfor %}
+        {% for inst_grp, props in data.policies[policy]["ora_inst_groups"].iteritems() %}
+            <tr>
+                <td colspan="2" style="padding: 0">
+                    <table class="inst_group">
+                        <thead>
+                        <tr>
+                            <td colspan="2">Oracle Instance Group</td>
+                            <td colspan="3">{{ inst_grp }}</td>
+                        </tr>
+                        <tr>
+                            <td>Instance Name</td>
+                            <td>Host</td>
+                            <td>OS Type</td>
+                            <td>ORACLE_HOME</td>
+                            <td>TNS_ADMIN</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in props %}
+                            <tr>
+                                {% for e in row %}
+                                    <td>{{ e }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        {% endfor %}
+        {% if data.policies[policy]["clients"] %}
+            <tr class="subhead">
+                <td>Client Name</td>
+                <td>Client OS</td>
+            </tr>
+            {% for (attr, val) in data.policies[policy]["clients"] %}
+                <tr>
+                    <td>{{ attr }}</td>
+                    <td>{{ val }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
         <tr class="subhead">
             <td colspan="2"><b>Backup Selections</b></td>
         </tr>
@@ -710,7 +785,7 @@ The proposed backup solution for the data center environment consists of the fol
                             </td>
                         </tr>
                         {% if schedule != '(none defined)' %}
-                        {{data.policies.draw_windows(policy,schedule)}}
+                            {{ data.policies.draw_windows(policy,schedule) }}
                         {% endif %}
                     </table>
                 </td>
@@ -731,21 +806,7 @@ The proposed backup solution for the data center environment consists of the fol
                 </td>
             </tr>
             {% if slp != None %}
-            {% for (attr, value) in data.slps[slp]["attributes"] %}
-                <tr>
-                    <td>
-                        {{ attr }}
-                    </td>
-                    <td>
-                        {{ value }}
-                    </td>
-                </tr>
-            {% endfor %}
-            {% for operation in  range(data.slps.len(data.slps[slp]["operations"])) %}
-                <tr class="subhead">
-                    <td colspan="2"> Operation {{ operation }}</td>
-                </tr>
-                {% for (attr, value) in data.slps[slp]["operations"][operation]["attributes"] %}
+                {% for (attr, value) in data.slps[slp]["attributes"] %}
                     <tr>
                         <td>
                             {{ attr }}
@@ -755,7 +816,21 @@ The proposed backup solution for the data center environment consists of the fol
                         </td>
                     </tr>
                 {% endfor %}
-            {% endfor %}
+                {% for operation in  range(data.slps.len(data.slps[slp]["operations"])) %}
+                    <tr class="subhead">
+                        <td colspan="2"> Operation {{ operation }}</td>
+                    </tr>
+                    {% for (attr, value) in data.slps[slp]["operations"][operation]["attributes"] %}
+                        <tr>
+                            <td>
+                                {{ attr }}
+                            </td>
+                            <td>
+                                {{ value }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
             {% endif %}
         </table>
         <br>
