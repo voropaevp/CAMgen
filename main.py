@@ -1,19 +1,14 @@
 #!C:\Python27\python.exe
 
-import os
+import pathlib
 import sys
 from re import match, sub, split
 import csv
-import zipfile
-import os.path
-import msvcrt
-import traceback
-from collections import  defaultdict
-import cgi
+from collections import defaultdict
 import argparse
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+# sys.setdefaultencoding('utf-8')
+from typing import Tuple, List
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -22,7 +17,7 @@ sys.stderr = sys.stdout
 
 class Parsers:
     @staticmethod
-    def get_value(value=str, line=str):
+    def get_value(value: str, line: str):
         m = match('^.*%s[ ]*:' % value, line)
         line = line[:-1] if line[-1:] == "\n" else line
         if m is not None:
@@ -135,7 +130,10 @@ class Policies(Parsers):
                                 continue
                             else:
                                 attr = attr[2:]
-                                self.policies[policy]["schedules"][schedule]["Attributes"][attr] = val
+                                try:
+                                    self.policies[policy]["schedules"][schedule]["Attributes"][attr] = val
+                                except KeyError:
+                                    pass
                 if self.get_value("  Calendar sched", line) == "Enabled":
                     self.policies[policy]["schedules"][schedule]["Calendar schedule"] = dict()
                     self.policies[policy]["schedules"][schedule]["Calendar schedule"]["Included dates"] = list()
@@ -199,7 +197,10 @@ class Policies(Parsers):
                     s_end = int(_end[0]) * 60 * 60 + int(_end[1]) * 60 + int(_end[2])
                     seconds[day] = (s_begin, s_end)
         for day in days:
-            coordinates.append([-1, -1, seconds[day][0], seconds[day][1]])
+            try:
+                coordinates.append([-1, -1, seconds[day][0], seconds[day][1]])
+            except KeyError:
+                return ""
         for x in range(0, 7):
             for i in range(0, 7):
                 if coordinates[i][3] > 24 * 60 * 60:
@@ -226,16 +227,17 @@ class Policies(Parsers):
             if coordinates[i][0] >= 0:
                 output += "<td style='border-top:0;padding:0; border-bottom:0;'><div style='position:relative;background-color: rgb(230, 91, 1);width:" + str(
                     round(333 * (coordinates[i][1] - coordinates[i][0]) / (
-                        24 * 60 * 60)) + round(coordinates[i][1] / (24 * 60 * 60) * 1.25)) + "pt;'>&nbsp;</div></td>\n"
+                            24 * 60 * 60)) + round(
+                        coordinates[i][1] / (24 * 60 * 60) * 1.25)) + "pt;'>&nbsp;</div></td>\n"
                 if coordinates[i][3] != 0:
                     for j in range(1, 12):
                         if j * 20 < round(240 * coordinates[i][2] / (24 * 60 * 60)) and round(
-                                                240 * coordinates[i][2] / (24 * 60 * 60)) < (j + 1) * 20:
+                                240 * coordinates[i][2] / (24 * 60 * 60)) < (j + 1) * 20:
                             output += "<td style='border-top:0;padding:0; border-bottom:0;'><div style='position:relative;background-color: rgb(230, 91, 1);margin-left:" + str(
                                 round((240 * coordinates[i][2] / (
-                                    24 * 60 * 60)) - j * 20) * 1.25) + "pt;width: " + str(round(
+                                        24 * 60 * 60)) - j * 20) * 1.25) + "pt;width: " + str(round(
                                 321 * (coordinates[i][3] - coordinates[i][2]) / (
-                                    24 * 60 * 60)) + (12 - j) * 1.25) + "pt;'>&nbsp;</div></td>\n"
+                                        24 * 60 * 60)) + (12 - j) * 1.25) + "pt;'>&nbsp;</div></td>\n"
                         else:
                             output += "<td style='border-top:0;padding:0; border-bottom:0;'></td>\n"
                 else:
@@ -245,13 +247,13 @@ class Policies(Parsers):
                 if coordinates[i][3] != 0:
                     for j in range(0, 12):
                         if j * 20 <= round(240 * coordinates[i][2] / (24 * 60 * 60)) and round(
-                                                240 * coordinates[i][2] / (24 * 60 * 60)) < (j + 1) * 20:
+                                240 * coordinates[i][2] / (24 * 60 * 60)) < (j + 1) * 20:
                             output += "<td style='border-top:0;padding:0; border-bottom:0;'><div style='background-color: rgb(230, 91, 1);position: relative;margin-left:" + str(
                                 round((240 * coordinates[i][2] / (
-                                    24 * 60 * 60)) - j * 20) * 1.25) + "pt;width: " + str(round(
+                                        24 * 60 * 60)) - j * 20) * 1.25) + "pt;width: " + str(round(
                                 333 * (coordinates[i][3] - coordinates[i][2]) / (
-                                    24 * 60 * 60)) + round((coordinates[i][3] - coordinates[i][2]) / (
-                                24 * 60 * 60) * 1.25)) + "pt;'>&nbsp;</div></td>\n"
+                                        24 * 60 * 60)) + round((coordinates[i][3] - coordinates[i][2]) / (
+                                    24 * 60 * 60) * 1.25)) + "pt;'>&nbsp;</div></td>\n"
                         else:
                             output += "<td style='border-top:0; border-bottom:0; padding:0;'></td>\n"
                 else:
@@ -381,7 +383,7 @@ class DiskPools(Parsers):
                     return 0
 
 
-class devices(Parsers):
+class Devices(Parsers):
     def __init__(self, nbconfig):
         self.devices = dict()
         self.robots = dict()
@@ -497,25 +499,27 @@ class DbInstance(object):
                         self.ora_instance_dict[row[6]].append([row[0]] + row[2:6])
 
 
-
 class NBSU:
     def __init__(self, path):
         self.path = path
         self.cont = dict()
         self.generalinfo = dict()
-        self.masterattr = [(str, str), ]
-        self.emmattr = [(str, str), ]
+        self.masterattr: List[Tuple[str, str]] = list()
+        self.emmattr: List[Tuple[str, str]] = list()
         self.devices = dict()
         self.stuMM = dict()
         self.stuDisk = dict()
         self.pools = dict()
-        self.vpools = [(str, str), ]
-        self.servers = [(str, str, str, str), ]
-        (_, _, filelist) = next(os.walk(self.path))
+        self.vpools: List[Tuple[str, str]] = list()
+        self.servers: List[Tuple[str, str, str, str]] = list()
+        filelist = pathlib.Path(self.path).iterdir()
         f = 0
         for filename in filelist:
-            if match(".*txt", filename) is not None:
-                self.cont[filename] = open(self.path + "\\" + filename, 'r').readlines()
+            if filename.suffix == ".txt":
+                try:
+                    self.cont[filename.name] = filename.read_text().splitlines()
+                except UnicodeDecodeError:
+                    print(f"unicode error in {filename.name}")
         if "nbsu_info.txt" not in self.cont:
             self.cont["nbsu_info.txt"] = "empty"
         for line in self.cont["nbsu_info.txt"]:
@@ -569,6 +573,7 @@ class NBSU:
             self.emmattr.append((attr, d[attr]))
         f = 0
         f1 = 0
+        v1, v2, v3, v4 = "", "", "", ""
         for line in self.cont["NBU_emm_config.txt"]:
             if f == 0:
                 if match(r".*verbose.*", line) is not None:
@@ -769,7 +774,7 @@ def build_document(nb, cinfo, descr, out):
         f = open(cinfo.CustomerShortName + ".html", "w")
     else:
         f = open(out, "w")
-    f.write(str(template.render(data=nb, customer=cinfo, desc=descr)).encode('utf-8'))
+    f.write(template.render(data=nb, customer=cinfo, desc=descr))
     f.close()
     # print "Content-Type: text/html; charset=utf-8;"
     # print "Location: " + cinfo.CustomerShortName + ".html"
@@ -843,7 +848,6 @@ c.SAN = "test"
 c.contacts = list()
 db_inst = DbInstance(args.nbsqladm, args.nboraadm)
 
-
 for policy in nb.policies:
     for inst_grp in nb.policies[policy]['inst_groups']:
         if inst_grp in db_inst.ora_instance_dict:
@@ -851,7 +855,7 @@ for policy in nb.policies:
         if inst_grp in db_inst.sql_instance_dict:
             nb.policies[policy]['sql_inst_groups'][inst_grp] = db_inst.sql_instance_dict[inst_grp]
     if "(specific storage unit not required)" == nb.policies[policy]["attributes"]["Residence"]:
-        print policy
+        print(policy)
     for schedule in nb.policies[policy]["schedules"]:
         if "Residence" not in nb.policies[policy]["schedules"][schedule]["Attributes"]:
             pass
